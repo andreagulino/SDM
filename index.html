@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" class="h-100">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Data Result and Visualization project">
+        <meta name="author" content="Andrea Gulino">
+        <title>SDM</title>
+
+        <!-- Libs CSS -->
+        <link href="libs/bootstrap-4/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+        <link href="libs/fontawesome/css/all.min.css" type="text/css" rel="stylesheet">
+        <link href="libs/noUiSlider/nouislider.min.css" type="text/css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="css/style.css" type="text/css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    </head>
+    <body class="d-flex flex-column h-100" ng-app="app" ng-controller="main_ctrl as main">
+        <header>
+
+            <!-- Fixed navbar -->
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                <a class="navbar-brand" href="/">SDM</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item {{active_menu=='home'?'active':''}}">
+                            <a class="nav-link" href="#!/home">Home</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+        </header>
+
+        <!-- Begin page content -->
+        <main role="main" class="flex-shrink-0">
+            <div class="container">
+                <div id="ngview" ng-view></div>  
+            </div>
+        </main>
+
+        <footer class="footer mt-auto py-3">
+            <div class="container">
+                <span class="text-muted">Politecnico di Milano - View it on <a target="_blank" href="https://github.com/andreagulino/">GitHub</a>.</span>
+            </div>
+        </footer>
+
+        <!-- JS -->
+        <script src="libs/jquery/jquery-3.3.1.min.js"></script>
+        <script src="libs/bootstrap-4/js/bootstrap.min.js"></script>
+        <script src="libs/fontawesome/js/fontawesome.min.js"></script>
+        <script src="libs/wnumb-1.1.0/wNumb.js"></script>
+        <script src="libs/noUiSlider/nouislider.min.js"></script>
+        <script src="libs/angularjs/angular.min.js"></script>
+        <script src="libs/angularjs/angular-route.min.js"></script>
+        <script src="libs/d3/d3.v4.js"></script>
+
+        <script src="js/support.js"></script>
+        <script src="js/app.js"></script>
+
+        <script src="objectives.js"></script>
+
+        <script src="js/controllers/main-controller.js"></script>
+
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrlJ4psM0iYyqxb_j474x2b0CjvA7N9A4">
+        </script>
+
+
+    </body>
+</html>

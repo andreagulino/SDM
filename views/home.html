@@ -1,0 +1,76 @@
+<!--h2 style="padding: 5px;">1. Introduction</h2-->
+<div style="padding-left: 15px; margin-bottom: 10px;">
+
+    <div class="row">
+        <div class="col-md-4">
+
+            <div class="row">
+                <div class="col-md-8"><h3>Objectives</h3></div>
+                <div class="col-md-4" style="line-height: 2em"><a  ng-click="allZero()" href="">RESET</a></div>
+            </div>
+
+            <hr>
+
+            <div id="obj_container" style="overflow-y: scroll">
+                <div ng-repeat="o in objectives track by $index" style="margin-bottom: 20px;">
+                    <p style="margin-bottom: 3px; font-size: 1em;">{{o.name}}</p>
+                    <div class="row">
+                        <div class="col-md-8"> <div style="margin-bottom: 10px" id="slider-{{$index}}"></div> </div>
+                        <div class="col-md-4" id="slider-value-{{$index}}" style="font-size: 14px;">
+                            <b>{{objectives[$index].weight}}</b> ({{objectives[$index].norm.toFixed(3)}})
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+
+            <div class="row">
+                <div class="col-md-8"><h3>Alternatives</h3>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <table class="table">
+
+                    <tr>
+                        <td><b>Name</b></td>
+                        <td><b>Score</b></td>
+                    </tr>
+
+                    <tr ng-repeat="el in finalvals | orderBy: '-score'">
+                        <td>{{el.name}}</td>
+                        <td>{{el.score.toFixed(2)}}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+
+
+        </div>
+        <div class="col-md-4">
+            <div id="map" class="map" style="margin-top: 50px"></div>
+            <script type="text/javascript">
+
+            </script>
+        </div>
+    </div>
+
+    <script>
+        var h = $(window).height();
+        var scale = 0.70; // This is 75%
+        $("#obj_container").css('height', h * scale);
+
+    </script>
+
+
+
+
+
+
+</div>
