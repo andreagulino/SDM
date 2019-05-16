@@ -36,8 +36,11 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
         }
 
         for(i=0; i<$scope.objectives.length; i++) {
-
-            $scope.objectives[i].norm = ($scope.objectives[i].weight / sum);
+            console.log("sum is "+sum);
+            if(sum>0)
+                $scope.objectives[i].norm = ($scope.objectives[i].weight / sum);
+            else 
+                $scope.objectives[i].norm = 0;
         }
 
 
@@ -45,11 +48,14 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
         $scope.finalvals = []
 
         for(i=0; i<AREAS.length; i++) {
+            
+           
 
             vector = PM[AREAS[i]];
             w_sum = 0;
 
             for( j=0; j<$scope.objectives.length; j++) {
+                
                 w_sum = w_sum + $scope.objectives[j].norm * vector[j];
             }
 
@@ -68,6 +74,8 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
         }
 
         $scope.normalized = $scope.finalvals.map(function(x){ 
+            console.log("returning "+ norml(x.score)+" from "+x.score)
+
             return {
                 name: x.name,
                 score: norml(x.score)
@@ -111,35 +119,6 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
         };
 
         L.geoJson($scope.mapAreas, {'style': areaStyle}).addTo($scope.map);
-
-
-
-
-
-
-        /*
-        for(i=0; i<normalized.length; i++) {
-            $scope.map_areas[AREAS[i]].fillColor = 'rgba(255,0,0,'+normalized[i].score.toFixed(1)+')'
-
-            if(normalized[i].score==1)
-                $scope.map_areas[AREAS[i]].strokeColor = 'rgba(0,0,0,'+normalized[i].score.toFixed(1)+')'
-            else
-                $scope.map_areas[AREAS[i]].strokeColor = 'rgba(255,0,0,'+normalized[i].score.toFixed(1)+')'
-
-            console.log( $scope.map_areas[AREAS[i]]);
-
-            if($scope.polygons[AREAS[i]]!=null) $scope.polygons[AREAS[i]].setMap(null);
-
-            $scope.polygons[AREAS[i]] = new google.maps.Polygon($scope.map_areas[AREAS[i]]);
-            $scope.polygons[AREAS[i]].setMap($scope.map);
-        }*/
-
-
-        //rgba(255, 0, 0, 0.8);
-
-
-
-
 
 
     }
@@ -247,8 +226,7 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
     }
 
     $scope.allZero = function() {
-        // TODO: IMPLEMENT
-
+ 
 
         for(i=0; i<$scope.objectives.length; i++) {
             $scope.objectives[i].weight = 0;
@@ -259,6 +237,8 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
         for(i=0; i<$scope.objectives.length; i++) {
             $scope.objectives[i].norm = 0;
         }
+        
+       console.log("setting to zero");
 
     }
 
