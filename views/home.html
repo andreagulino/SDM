@@ -13,11 +13,11 @@
 
             <div id="obj_container" style="overflow-y: scroll">
                 <div ng-repeat="o in objectives track by $index" style="margin-bottom: 20px;">
-                    <p style="margin-bottom: 3px; font-size: 1em;">{{o.name}}</p>
+                    <p style="margin-bottom: 3px; font-size: 0.8em;">{{o.name}} {{o.min}}-{{o.max}}</p>
                     <div class="row">
                         <div class="col-md-8"> <div style="margin-bottom: 10px" id="slider-{{$index}}"></div> </div>
-                        <div class="col-md-4" id="slider-value-{{$index}}" style="font-size: 14px;">
-                            <b>{{objectives[$index].weight}}</b> ({{objectives[$index].norm.toFixed(3)}})
+                        <div class="col-md-4" id="slider-value-{{$index}}" style="font-size: 12px;">
+                            <b>{{objectives[$index].weight}}%</b> ({{objectives[$index].norm.toFixed(3)}})
                         </div>
                     </div>
 

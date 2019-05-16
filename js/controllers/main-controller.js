@@ -50,7 +50,7 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
             w_sum = 0;
 
             for( j=0; j<$scope.objectives.length; j++) {
-                w_sum = w_sum + $scope.objectives[j].weight * vector[j];
+                w_sum = w_sum + $scope.objectives[j].norm * vector[j];
             }
 
             $scope.finalvals[i] = {name: AREAS[i], score: w_sum};
@@ -67,17 +67,51 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
             return  (x-min)/(max-min) 
         }
 
-        normalized = $scope.finalvals.map(function(x){ 
+        $scope.normalized = $scope.finalvals.map(function(x){ 
             return {
                 name: x.name,
                 score: norml(x.score)
             }
         });
 
-        console.log(normalized);
 
-        // Fix the area color
+        // Add areas on the map
 
+        //if( $scope.mapAreas!=null)
+        //  L.geoJson($scope.mapAreas, {'style': areaStyle}).addTo(null);
+
+        // Remove all polygons
+        $scope.map.eachLayer(function (layer) {
+           if(layer.feature!=null && layer.feature.geometry.type=="Polygon")
+            $scope.map.removeLayer(layer);
+        });
+
+
+        $scope.mapAreas = [{
+            "type": "FeatureCollection",
+            "features": $scope.getFeatures()
+        }];
+
+
+        function areaStyle(feature){
+            return {
+                fillColor: feature["properties"]["fill-color"],
+                weight: 4,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.5
+            }
+        };
+
+        L.geoJson($scope.mapAreas, {'style': areaStyle}).addTo($scope.map);
+
+
+
+
+
+
+        /*
         for(i=0; i<normalized.length; i++) {
             $scope.map_areas[AREAS[i]].fillColor = 'rgba(255,0,0,'+normalized[i].score.toFixed(1)+')'
 
@@ -92,7 +126,7 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
 
             $scope.polygons[AREAS[i]] = new google.maps.Polygon($scope.map_areas[AREAS[i]]);
             $scope.polygons[AREAS[i]].setMap($scope.map);
-        }
+        }*/
 
 
         //rgba(255, 0, 0, 0.8);
@@ -148,37 +182,53 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
         }
 
         // MAP
+
+        // Fix size
         var h = $(window).height();
-        var scale = 0.70; // This is 75%
+        var scale = 0.75; // This is 75%
         $("#map").css('height', h * scale);
 
-        $scope.map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 13,
-            center: {lng: 9.216928, lat: 45.468785},
-            mapTypeId: 'terrain'
-        });
+        // Initialize the map
+        $scope.map = L.map('map').setView([45.464211,  9.191383], 12);
+
+        // Setup token
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox.streets',
+            accessToken: 'pk.eyJ1IjoiYW5kcmVhZ3VsaW5vIiwiYSI6ImNqdnFla2R6cTJpcWI0YW11cWprNWc4MWIifQ.HLUgsin2A-fwQpqbuJIqjQ'
+        }).addTo($scope.map);
+
+    }
 
 
-        $scope.map_areas = []
-        $scope.polygons = []
+    $scope.getFeatures = function() {
 
-        for(i=0; i<AREAS.length; i++) {
+        features = []
 
-            $scope.map_areas[AREAS[i]] =  {
-                paths:  $scope.coords[AREAS[i]] ,
-                strokeColor: '#FF0000',
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
-                fillColor: '#FF0000',
-                fillOpacity: 0.35
+        for(i=0; i<AREAS.length; i++) {
+
+            features[i] = {
+                "type": "Feature",
+                "properties": {
+                    "stroke": "#555555",
+                    "stroke-width": 2,
+                    "stroke-opacity": 1,
+                    "fill": "#555555",
+                    "fill-opacity": 0.5,
+                    "fill-color": 'rgba(255,0,0,'+$scope.normalized[i].score.toFixed(1)+')',
+                    "Name": AREAS[i]
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [$scope.coords[AREAS[i]].map(function(x){return [x.lng, x.lat]})]
+                }
             }
 
-            //$scope.polygons[AREAS[i]] = new google.maps.Polygon($scope.map_areas[AREAS[i]]);
-            //$scope.polygons[AREAS[i]] .setMap($scope.map);
 
         }
 
-
+        return features;
     }
 
     $scope.reset = function() {
@@ -196,7 +246,7 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
         for(i=0; i<$scope.objectives.length; i++) {
             $scope.objectives[i].weight = 0;
             $scope.buildSlider($scope.objectives[i].slider,0); 
-   
+
         }
 
         for(i=0; i<$scope.objectives.length; i++) {
