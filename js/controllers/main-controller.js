@@ -93,12 +93,18 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
         }];
 
 
+        function getColor(feature) {
+                if(feature["properties"]["score"]==1)
+                    return 'black'
+                else 
+                    return 'white'
+        }
         function areaStyle(feature){
             return {
                 fillColor: feature["properties"]["fill-color"],
                 weight: 4,
                 opacity: 1,
-                color: 'white',
+                color: getColor(feature),
                 dashArray: '3',
                 fillOpacity: 0.5
             }
@@ -216,6 +222,7 @@ app.controller('home_ctrl', function($scope, $timeout, $location, $http, $rootSc
                     "stroke-opacity": 1,
                     "fill": "#555555",
                     "fill-opacity": 0.5,
+                    "score": $scope.normalized[i].score.toFixed(1),
                     "fill-color": 'rgba(255,0,0,'+$scope.normalized[i].score.toFixed(1)+')',
                     "Name": AREAS[i]
                 },
